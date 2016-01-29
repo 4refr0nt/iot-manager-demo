@@ -1,2 +1,2 @@
-# official - sketches from IoT Manager developers
-# users - users sketches
+### official-demo - sketches from IoT Manager developers
+### users-demo - users sketches
