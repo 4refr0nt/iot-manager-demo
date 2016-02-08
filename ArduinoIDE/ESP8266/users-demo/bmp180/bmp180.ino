@@ -140,7 +140,7 @@ void pubConfig() {
           Serial.println("Publish config FAIL! ("    + thing_config[i] + ")");
         }
         delay(150);
-      }    
+      }  
   }
   if (success) {
      Serial.println("Publish config: Success");
@@ -151,7 +151,7 @@ void pubConfig() {
   for (int i = 0; i < nWidgets; i = i + 1) {
       pubStatus(sTopic[i], stat[i]);
       delay(100);
-  }    
+  }  
 }
 void callback(const MQTT::Publish& sub) {
   Serial.print("Get data from subscribed topic ");
@@ -170,6 +170,11 @@ void setup() {
   Serial.println("Could not find a valid BMP085 sensor, check wiring!");
   while (1) {}
   }
+  delay(50);
+        temp = String(bmp.readTemperature());
+        davlen= String(bmp.readPressure()/133);
+        stat[0] = setStatus( temp );
+        stat[1] = setStatus( davlen );
  
   WiFi.mode(WIFI_STA);
   initVar();
@@ -196,11 +201,7 @@ void loop() {
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
       return;
     }
-        temp = String(bmp.readTemperature());
-        davlen= String(bmp.readPressure()/133);
-        stat[0] = setStatus( temp );
-        stat[1] = setStatus( davlen );
-     
+         
     Serial.println("");
     Serial.println("WiFi connect: Success");
     Serial.print("IP address: ");
