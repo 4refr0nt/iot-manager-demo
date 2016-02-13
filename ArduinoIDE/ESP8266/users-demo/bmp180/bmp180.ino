@@ -41,9 +41,6 @@ String sTopic      [nWidgets];
 String stat        [nWidgets];
 int    pin         [nWidgets];
 String thing_config[nWidgets];
-StaticJsonBuffer<1024> jsonBuffer;
-JsonObject& json_status = jsonBuffer.createObject();
-String string_status;
  
 void FreeHEAP() {
   if ( ESP.getFreeHeap() < freeheap ) {
@@ -58,16 +55,10 @@ void FreeHEAP() {
 }
  
 String setStatus ( String s ) {
-  json_status["status"] = s;
-  string_status = "";
-  json_status.printTo(string_status);
-  return string_status;
+  return "{\"status\":\"" + s + "\"}";
 }
 String setStatus ( int s ) {
-  json_status["status"] = s;
-  string_status = "";
-  json_status.printTo(string_status);
-  return string_status;
+  return "{\"status\":\"" + String(s) + "\"}";
 }
 void initVar() {
  
@@ -76,6 +67,7 @@ void initVar() {
   sTopic[1] = prefix + "/" + deviceID + "/BMP180_davlen";
   stat  [1] = setStatus (1);
  
+  StaticJsonBuffer<8096> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   JsonObject& cfg  = jsonBuffer.createObject();
  

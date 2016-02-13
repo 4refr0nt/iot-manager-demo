@@ -20,3 +20,6 @@ display-value widget demo
 
 simple-btn widget demo
 
+### anydata
+
+anydata widget demo with DS18B20
