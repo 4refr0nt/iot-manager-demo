@@ -254,7 +254,7 @@ void setup() {
      Serial.println();
      Serial.println();
      Serial.println("TEMP SENSORS NOT FOUND!");
-     restart();
+     //restart();
   }
   Serial.print(devices, DEC);
   Serial.println(" devices.");
@@ -268,7 +268,7 @@ void setup() {
      Serial.println();
      Serial.println();
      Serial.println("Unable to find address for Device 0"); 
-     restart();
+     //restart();
   }
 
   Serial.println();
