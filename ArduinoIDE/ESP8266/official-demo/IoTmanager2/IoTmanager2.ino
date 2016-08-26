@@ -151,7 +151,7 @@ void initVar() {
   pin   [4] = 2;                                           // GPIO2
   inverted[4] = true;
   sTopic[4] = prefix + "/" + deviceID + "/light4";     
-  style [4]   = "\"style\":\"font-size:150%;\"";
+  style [4]   = "font-size:150%;";
   
   // RED
   id    [5] = "5";
@@ -364,7 +364,7 @@ void loop() {
         client.set_callback(callback);
         Serial.println("Connect to MQTT server: Success");
         pubConfig();
-	      client.subscribe(prefix);                 // for receiving HELLO messages
+              client.subscribe(prefix);                 // for receiving HELLO messages
         client.subscribe(prefix + "/ids");        // for receiving IDS  messages
         client.subscribe(sTopic[0] + "/control"); // for receiving GPIO messages
         client.subscribe(sTopic[1] + "/control"); // for receiving GPIO messages

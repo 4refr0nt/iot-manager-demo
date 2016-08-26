@@ -1,22 +1,23 @@
 ﻿////////////////////////////////////////////////
 //
-// Demo device emulator for "joystick-btn" widget
+// !Not worked, in development now! Demo device emulator for "joystick-btn" widget
 //
 //
 //
 // IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
 //
 // version     : 1.0
-// IoT Manager : 1.4.7 and above
+// IoT Manager : 1.4.12 and above
 //
 ////////////////////////////////////////////////
 
 ////////////////////////////////////////////////
 var config = require("./config");
-var host = config.host;
-var port = config.port;
-var user = config.user;
-var pass = config.pass;
+var host   = config.host;
+var port   = config.port;
+var user   = config.user;
+var pass   = config.pass;
+var prefix = config.prefix;
 ////////////////////////////////////////////////
 
 var mqtt = require('mqtt');
@@ -31,11 +32,11 @@ var opt = {
 };
 
 var deviceID = "uniqueId-0002";
-var prefix   = "/IoTmanager";
-var widget   = "joystick-btn4";
 
-var config1 = {"id":"1",
-  page   : "joystick",
+var widget   = "joystick-btnXY";
+
+var config1 = {
+  id     : "1",
   widget : widget,
   class1 : "item no-border no-padding",
   style1 : "",
@@ -87,8 +88,6 @@ pubConfig();
 ////////////////////////////////////////////////
 function pubConfig() {
     client.publish( prefix, deviceID );
-    setTimeout(function() {
-      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config1),{ qos : 1 });
-    }, 500);
+    client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config1),{ qos : 1 });
 }
 ////////////////////////////////////////////////

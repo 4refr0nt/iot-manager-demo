@@ -108,8 +108,7 @@ var config4 = {
      maxMeasuredValueVisible : true,
      minValue : -50,
      maxValue :  50,
-     thresholdVisible : false,
-     labelNumberFormat : "FRACTIONAL"
+     thresholdVisible : false
   }
 };
 

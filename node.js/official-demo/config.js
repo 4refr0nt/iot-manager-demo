@@ -11,10 +11,11 @@
  */
 
 module.exports ={
-//  host : '192.168.0.103',
-  host : 'm20.cloudmqtt.com',
+//  host : '192.168.1.135',
 //  port : 1883,
+  host : 'm20.cloudmqtt.com',
   port : 13191,
   user : "test",
-  pass : "test"
+  pass : "test",
+  prefix: "/IoTmanager"
 }

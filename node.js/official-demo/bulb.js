@@ -68,8 +68,7 @@ var config3 = {
   widgetConfig : {
      width  : 80,
      height : 36,
-     size   : 80,
-     type   : "Battery",
+     type   : "Battery"
   }
 };
 
