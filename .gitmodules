@@ -1,0 +1,3 @@
+[submodule "bash/users/RaspyIot"]
+	path = bash/users/RaspyIot
+	url = https://github.com/bigjohnson/RaspyIot.git
