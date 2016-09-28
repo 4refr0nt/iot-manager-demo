@@ -5,8 +5,8 @@
 //
 // IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
 //
-// version     : 1.0
-// IoT Manager : 1.4.11 and above
+// version     : 1.1
+// IoT Manager : 1.5.0 and above
 //
 ////////////////////////////////////////////////
 
@@ -157,11 +157,11 @@ client.on('message', function (topic, message) {
 
 console.log('Start');
     setInterval(function() {
-      temp  = Math.random() * 100;
-      temp2 = Math.random() * 100;
-      temp3 = Math.random() * 100;
-      temp4 = Math.random() * 50;
-      temp5 = Math.random() * 50;
+      temp  = Math.round(Math.random() * 100);
+      temp2 = Math.round(Math.random() * 100);
+      temp3 = Math.round(Math.random() * 100);
+      temp4 = Math.round(Math.random() * 50);
+      temp5 = Math.round(Math.random() * 50);
       pubStatus1();
 
     }, 5000);

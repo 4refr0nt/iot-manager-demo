@@ -154,7 +154,6 @@ var config6 = {
     waveRise : false,
     waveHeightScaling : false,
     waveOffset : 0.25,
-    textSize : 0.75,
     displayPercent : false,
     minValue : 30,
     maxValue : 150,
