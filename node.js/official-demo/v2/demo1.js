@@ -11,11 +11,11 @@
 //
 // Connection
 //
-var host     = 'm11.cloudmqtt.com';
-var port     = 10927;
-var user     = "test";
-var pass     = "test";
-var prefix   = "/IoTmanager";
+var host = 'm11.cloudmqtt.com';
+var port = 10927;
+var user = "test";
+var pass = "test";
+var prefix = "/IoTmanager";
 var deviceId = "dev-0001";
 ////////////////////////////////////////////////
 
@@ -46,7 +46,8 @@ var widget = "anydata";
 var id = "0"
 config[0] = {
     id: id,
-    page: pagesList.pages[0], // page1
+    page: pagesList.pages[0].pageName, // page1
+    pageId: pagesList.pages[0].pageId, // page1
     widget: widget,
     class1: "item no-border",
     style2: "font-size:16px;",
@@ -61,8 +62,8 @@ widget = "anydata";
 id = "1"
 config[1] = {
     id: id,
-    page: pagesList.pages[1], // page2
-    pageId: 10,
+    page: pagesList.pages[1].pageName, // page2
+    pageId: pagesList.pages[1].pageId, // page2
     widget: widget,
     class1: "item no-border",
     style2: "font-size:20px;float:left",
@@ -77,8 +78,8 @@ widget = "anydata";
 id = "2"
 config[2] = {
     id: id,
-    page: pagesList.pages[1], // page2
-    pageId: 20,
+    page: pagesList.pages[1].pageName, // page2
+    pageId: pagesList.pages[1].pageId, // page2
     widget: widget,
     class1: "item no-border",
     style2: "font-size:20px;float:left;line-height:3em",
@@ -94,7 +95,8 @@ widget = "anydata";
 id = "3"
 config[3] = {
     id: id,
-    page: pagesList.pages[2], // page3
+    page: pagesList.pages[2].pageName, // page3
+    pageId: pagesList.pages[2].pageId, // page3
     widget: widget,
     class1: "item no-border",
     style2: "font-size:20px;float:left;line-height:3em",
@@ -109,7 +111,8 @@ widget = "anydata";
 id = "4"
 config[4] = {
     id: id,
-    page: pagesList.pages[3], // page4
+    page: pagesList.pages[3].pageName, // page4
+    pageId: pagesList.pages[3].pageId, // page4
     widget: widget,
     class1: "item no-border",
     style2: "font-size:30px;float:left",
@@ -130,7 +133,7 @@ client.on('connect', function() {
 
     // client.subscribe(prefix + "/" + deviceId + "/+/control", { qos: 1 }); // all control commands for this device - compatible with old exchange protocol, but not used in this example
     // pubConfig(); // I'm online now! - old style
-    pubPages();     // I'm online now! - new style
+    pubPages(); // I'm online now! - new style
 });
 
 
@@ -156,36 +159,39 @@ client.on('message', function(topic, message) {
     }
 
     // get mobile device id - may be useful for different response to different mobile device, not used in this example
-    var id = topic.toString().split("/")[2]; 
+    var id = topic.toString().split("/")[2];
 
     // new exchange protocol?
-    if (topic.toString() === prefix + "/" + id + "/request") { 
+    if (topic.toString() === prefix + "/" + id + "/request") {
 
         // extract command and param
-        var msg = JSON.parse(message.toString()); 
+        var msg = JSON.parse(message.toString());
 
         console.log('New request from IoT Manager: id="' + id + '", command="' + msg.command + '", param="' + msg.param + '"');
 
         // response: my pages list
-        if (msg.command === "getPages") { 
+        if (msg.command === "getPages") {
 
             console.log("Command detected: getPages");
             pubPages();
 
-        // response: widgets config from one page only
-        } else if (msg.command === "getPageById") { 
+            // response: widgets config from one page only
+        } else if (msg.command === "getPageById" && msg.param > 0) {
 
             console.log('Command detected: "getPageById", param: "' + msg.param + '"');
+
 
             pagesList.pages.forEach(function(item, i, arr) {
 
                 // it is one of our pages?
-                if (item.pageId === msg.param) { 
+                if (item.pageId === msg.param) {
                     console.log('Request is for existing page "' + item.pageName + '", pageId="' + msg.param + '"');
                     pubPage(msg.param);
                 }
             });
-
+        } else if (msg.command === "getPageById" && msg.param === 0) {
+            console.log('Request is for All pages.');
+            pubPage(0);
         }
 
     }
@@ -196,8 +202,7 @@ function pubPage(page) {
 
     // check all widgets and pub widgets config from requested page
     config.forEach(function(item, i, arr) {
-
-        if (item.page.pageId == page) {
+        if (item.pageId === page || page === 0) {
 
             // pub config for one widget
             console.log('Action: response config widget id="' + item.id + '"');
@@ -211,6 +216,9 @@ function pubPage(page) {
 
 
 function pubStatus(i) {
+
+    var status;
+
     if (i == 0) {
         // do nothing - in this example widget 0 without status
         return;
@@ -242,7 +250,7 @@ function pubStatus(i) {
 
 function pubPages() {
 
-    console.log('Action: Pub pages list');
+    console.log('Action: Pub pages list: ' + JSON.stringify(pagesList));
     client.publish(prefix + "/" + deviceId + "/response", JSON.stringify(pagesList));
 }
 
