@@ -64,11 +64,14 @@ var config4 = {
   id     :"4",
   page   :"bathroom",
   pageId :"2",
-  descr  :"Light 4",
+  descr  :"Outdoor light",
   widget :"toggle",
   topic  :prefix+ "/" + deviceID + "/light4",
-  color  :"blue", // also, you can use any HTML color code
-  iconStyle: "display:none;"
+  iconClass   : "ion-ios-lightbulb",
+  iconClassOff: "ion-ios-lightbulb-outline",
+  iconStyle   : "font-size:30px;color:#F2CD1F;",
+  iconStyleOff: "font-size:30px;color:#eee;",
+  descrStyle  : "font-size:20px;line-height:1.5em;"
 };
 var config5 = {
   // config with colored custom icons and big size description
@@ -91,7 +94,7 @@ var config6 = {
   pageId :"2",
   descr  :"Light 6",
   widget :"toggle",
-  class1 : "super0class",
+  class1 : "",
   topic  :prefix + "/" + deviceID + "/light6",
   descrClass    :"balanced-900 text-center",
   descrStyle    :"background-color:#0F0;border:solid 2px #F00;font-size:20px;font-weight:bold;",

@@ -34,6 +34,7 @@ var opt = {
 var config1 = {"id":"1",
   "page":"control",
   "pageId":"1",
+  pageTopic : "/xxx",
   "descr":"pump 1",
   "widget":"toggle",
   "itemstyle" : "",
@@ -61,7 +62,7 @@ var config3 = {"id":"3",
   class1 : "item no-border",
   style1 : "",
   descr  : "Water level",
-  class2 : "light text-center",
+  class2 : "text-center",
   style2 : "font-size:24px;font-weight:bold;padding-bottom:5px;",
   topic  : "/IoTmanager/deviceID/fillgauge3",
   width  : "150",
@@ -235,32 +236,6 @@ client.on('message', function (topic, message) {
 });
 
 console.log('Start');
-////////////////////////////////////////////////
-function pubStatus1() {
-      console.log("Send status1:" + volume1);
-      client.publish('/IoTmanager/deviceID/fillgauge3/status', JSON.stringify({ status: volume1 }));
-      client.publish('/IoTmanager/deviceID/fillgauge5/status', JSON.stringify({ status: volume1 }));
-}
-function pubStatus2() {
-      console.log("Send status2:" + volume2);
-      client.publish('/IoTmanager/deviceID/fillgauge4/status', JSON.stringify({ status: volume2 }));
-      client.publish('/IoTmanager/deviceID/fillgauge6/status', JSON.stringify({ status: volume2 }));
-}
-////////////////////////////////////////////////
-function pubConfig() {
-    client.publish('/IoTmanager', 'deviceID');
-    client.subscribe('/IoTmanager/deviceID/pump1/control',{ qos : 1 });
-    client.subscribe('/IoTmanager/deviceID/pump2/control',{ qos : 1 });
-    setTimeout(function() {
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config1),{ qos : 1 });
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config2),{ qos : 1 });
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config3),{ qos : 1 });
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config4),{ qos : 1 });
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config5),{ qos : 1 });
-      client.publish('/IoTmanager/deviceID/config', JSON.stringify(config6),{ qos : 1 });
-      pubStatus1();
-      pubStatus2();
-    }, 500);
     setInterval(function() {
       if (volume1 < 100) {
          volume1 += 5;
@@ -277,5 +252,30 @@ function pubConfig() {
       pubStatus2();
 
     }, 5000);
+
+////////////////////////////////////////////////
+function pubStatus1() {
+      console.log("Send status1:" + volume1);
+      client.publish('/IoTmanager/deviceID/fillgauge3/status', JSON.stringify({ status: volume1 }));
+      client.publish('/IoTmanager/deviceID/fillgauge5/status', JSON.stringify({ status: volume1 }));
+}
+function pubStatus2() {
+      console.log("Send status2:" + volume2);
+      client.publish('/IoTmanager/deviceID/fillgauge4/status', JSON.stringify({ status: volume2 }));
+      client.publish('/IoTmanager/deviceID/fillgauge6/status', JSON.stringify({ status: volume2 }));
+}
+////////////////////////////////////////////////
+function pubConfig() {
+    client.publish('/IoTmanager', 'deviceID');
+    client.subscribe('/IoTmanager/deviceID/pump1/control',{ qos : 1 });
+    client.subscribe('/IoTmanager/deviceID/pump2/control',{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config1),{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config2),{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config3),{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config4),{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config5),{ qos : 1 });
+    client.publish('/IoTmanager/deviceID/config', JSON.stringify(config6),{ qos : 1 });
+    pubStatus1();
+    pubStatus2();
 }
 ////////////////////////////////////////////////

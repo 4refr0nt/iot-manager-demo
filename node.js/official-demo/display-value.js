@@ -6,7 +6,7 @@
 //
 // IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
 //
-// version     : 1.5
+// version     : 1.6
 // IoT Manager : 1.4.6 and above
 //
 ////////////////////////////////////////////////
@@ -35,8 +35,9 @@ var prefix   = "/IoTmanager";
 
 var config1 = {"id":"1",
   page   : "display 1",
+//  pageId : 1,
   widget : "display-value",
-  class1 : "item no-border",
+  class1 : "item item-dark no-border",
   style1 : "",
   descr  : "Display-1",
   class2 : "balanced",
@@ -52,8 +53,9 @@ var config1 = {"id":"1",
 
 var config2 = {"id":"2",
   page   : "display 2",
+//  pageId : 2,
   widget : "display-value",
-  class1 : "item no-border",
+  class1 : "item item-dark no-border",
   style1 : "",
   descr  : "Display-2",
   class2 : "assertive",
@@ -69,8 +71,9 @@ var config2 = {"id":"2",
 
 var config3 = {"id":"3",
   page   : "display 34",
+//  pageId : 3,
   widget : "display-value",
-  class1 : "no-border text-center col-xs-6",
+  class1 : "item no-border item-dark text-center col-xs-6",
   style1 : "",
   descr  : "d-3",
   class2 : "calm",
@@ -86,8 +89,9 @@ var config3 = {"id":"3",
 
 var config4 = {"id":"4",
   page   : "display 34",
+//  pageId : 3,
   widget : "display-value",
-  class1 : "no-border text-center col-xs-6",
+  class1 : "item no-border item-dark text-center col-xs-6",
   style1 : "",
   descr  : "d-4",
   class2 : "energized",
@@ -101,7 +105,25 @@ var config4 = {"id":"4",
   digits_count   : 2
 };
 
+var config5 = {
 
+id     :"5",
+page   : "Temp",
+//pageID : "3",
+widget : "display-value",
+class1 : "item no-border",                          // class for 1st div
+style1 : "",                                        // style for 1st div
+descr  : "Комната",                            // text  for description
+class2 : "balanced",                                // class for description from Widgets Guide - Color classes
+style2 : "font-size:20px;float:left;padding-top:10px;font-weight:bold;", // style for description
+topic  : prefix + "/" + deviceID + "/display5",
+class3 : "",                                        // class for 3 div - SVG
+style3 : "float:right;",                            // style for 3 div - SVG
+height : "40",                                      // SVG height without "px"
+color  : "#52FF00",                                 // color for active segments
+inactive_color : "#414141",                         // color for inactive segments
+digits_count   : 4                                 // how many digits
+};
 var client  = mqtt.connect(opt);
 
 client.on('connect', function () {
@@ -132,13 +154,15 @@ setInterval(function() {
   pubStatus2();
   pubStatus3();
   pubStatus4();
+  pubStatus5();
 }, 5000);
 
 ////////////////////////////////////////////////
 function pubStatus1() {
-      value1 = (500 - Math.round( Math.random() * 1000 ))/1;
+      value1 = (20 - Math.round( Math.random() * 40 ));
       console.log("Send status 1:" + value1);
-      client.publish( config1.topic + "/status", JSON.stringify({ status: value1 }) );
+      value1 = value1 + '°C'
+      client.publish( config1.topic + "/status", JSON.stringify({ status: value1, toast: "Outdoor temp now: "+value1, vibrate: 50 }) );
 }
 ////////////////////////////////////////////////
 function pubStatus2() {
@@ -157,6 +181,11 @@ function pubStatus4() {
       value4 = Math.round( Math.random() * 99 );
       console.log("Send status 4:" + value4 + " color");
       client.publish( config4.topic + "/status", JSON.stringify({ status: value4, color : "#000000" }) );
+}
+function pubStatus5() {
+      value5 = Math.round( Math.random() * 99 );
+      console.log("Send status 5:" + value5 + " color");
+      client.publish( config5.topic + "/status", JSON.stringify({ status: value5 }) );
 }
 ////////////////////////////////////////////////
 function pubConfig() {
@@ -182,5 +211,7 @@ function pubConfig() {
     setTimeout(function() {
       pubStatus4();
     }, 1400);
+      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config5),{ qos : 1 });
+      pubStatus5();
 }
 ////////////////////////////////////////////////

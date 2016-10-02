@@ -40,6 +40,7 @@ config[0] = {
   id     : id,
   page   : "b1",
   pageId : 1,
+  pageTopic : prefix + "/page1",
   widget : widget,
   class1 : "item no-border no-padding-bottom",
   descr  : "Fab button with any colors",

@@ -33,6 +33,8 @@ var opt = {
 
 var config1 = {
   id     :"1",
+  pageId : 1,
+  page   : "1",
   descr  :"Steel 1",
   widget :"steel",
   topic  :prefix + "/" + deviceID + "/steel1",
@@ -48,6 +50,8 @@ var config1 = {
 
 var config2 = {
   id     :"2",
+  pageId : 1,
+  page   : "1",
   descr  : "Steel 2",
   widget : "steel",
   topic  : prefix + "/" + deviceID + "/steel2",
@@ -72,6 +76,8 @@ var config2 = {
 
 var config3 = {
   id     :"3",
+  pageId : 2,
+  page   : "2",
   descr  : "Steel 3",
   widget : "steel",
   topic  : prefix + "/" + deviceID + "/steel3",
@@ -95,6 +101,8 @@ var config3 = {
 
 var config4 = {
   id     :"4",
+  pageId : 3,
+  page   : "3",
   descr  : "Steel 4",
   widget : "steel",
   topic  : prefix + "/" + deviceID + "/steel4",
@@ -114,6 +122,8 @@ var config4 = {
 
 var config5 = {
   id     :"5",
+  pageId : 3,
+  page   : "3",
   descr  : "Steel 5",
   widget : "steel",
   topic  : prefix + "/" + deviceID + "/steel5",
