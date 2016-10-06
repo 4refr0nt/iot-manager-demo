@@ -1,20 +1,16 @@
 /*
- IoT Manager mqtt device client 
- 
- https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
- 
- Based on Basic MQTT example with Authentication
- 
- PubSubClient library v 1.91.1 https://github.com/Imroy/pubsubclient
-  - connects to an MQTT server, providing userdescr and password
-  - publishes config to the topic "/IoTmanager/config/deviceID/"
-  - subscribes to the topic "/IoTmanager/hello" ("hello" messages from mobile device) 
+  IoT Manager mqtt device client
 
-  Tested with Arduino IDE 1.6.12 + ESP8266 Community Edition v 2.3.0
-  
-  PubSubClient library v 1.91.1 https://github.com/Imroy/pubsubclient
-  
-  sketch version : 1.6
+  https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+  https://itunes.apple.com/us/app/iot-manager/id1155934877
+
+  Based on Basic MQTT example with Authentication
+
+  Tested with Arduino IDE 1.6.12    http://arduino.cc
+  ESP8266 Community Edition v2.3.0  https://github.com/esp8266/Arduino
+  PubSubClient library v 1.91.1     https://github.com/Imroy/pubsubclient
+
+  sketch version : 2.0
   IoT Manager    : any version
 
   toggle, range, small-badge widgets demo
@@ -33,19 +29,19 @@ String deviceID = "dev01-kitchen";   // thing ID - unique device id in our proje
 WiFiClient wclient;
 
 // config for cloud mqtt broker by DNS hostname ( for example, cloudmqtt.com use: m20.cloudmqtt.com - EU, m11.cloudmqtt.com - USA )
-//String mqttServerName = "m11.cloudmqtt.com";            // for cloud broker - by hostname, from CloudMQTT account data
-//int    mqttport = 10927;                                // default 1883, but CloudMQTT.com use other, for example: 13191, 23191 (SSL), 33191 (WebSockets) - use from CloudMQTT account data
-//String mqttuser =  "test";                              // from CloudMQTT account data
-//String mqttpass =  "test";                              // from CloudMQTT account data
-//PubSubClient client(wclient, mqttServerName, mqttport); // for cloud broker - by hostname
+String mqttServerName = "m11.cloudmqtt.com";            // for cloud broker - by hostname, from CloudMQTT account data
+int    mqttport = 10927;                                // default 1883, but CloudMQTT.com use other, for example: 13191, 23191 (SSL), 33191 (WebSockets) - use from CloudMQTT account data
+String mqttuser =  "test";                              // from CloudMQTT account data
+String mqttpass =  "test";                              // from CloudMQTT account data
+PubSubClient client(wclient, mqttServerName, mqttport); // for cloud broker - by hostname
 
 
 // config for local mqtt broker by IP address
-IPAddress server(192, 168, 1, 135);                        // for local broker - by address
-int    mqttport = 1883;                                    // default 1883
-String mqttuser =  "";                                     // from broker config
-String mqttpass =  "";                                     // from broker config
-PubSubClient client(wclient, server, mqttport);            // for local broker - by address
+//IPAddress server(192, 168, 1, 135);                        // for local broker - by address
+//int    mqttport = 1883;                                    // default 1883
+//String mqttuser =  "";                                     // from broker config
+//String mqttpass =  "";                                     // from broker config
+//PubSubClient client(wclient, server, mqttport);            // for local broker - by address
 
 String val;
 String ids = "";
@@ -131,7 +127,7 @@ void initVar() {
   pin   [4] = 2;                                           // GPIO2
   defaultVal[4] = 1;                                       // defaultVal status 0%
   inverted[4] = true;
-  sTopic[4] = prefix + "/" + deviceID + "/light4";     
+  sTopic[4] = prefix + "/" + deviceID + "/light4";
   color [4] = "\"color\":\"red\"";                         // black, blue, green, orange, red, white, yellow (off - grey)
 
   // RED
@@ -172,58 +168,54 @@ void initVar() {
 
   for (int i = 0; i < nWidgets; i++) {
     if (inverted[i]) {
-      if (defaultVal[i]>0) {
-         stat[i] = setStatus(0);
+      if (defaultVal[i] > 0) {
+        stat[i] = setStatus(0);
       } else {
-         stat[i] = setStatus(1);
+        stat[i] = setStatus(1);
       }
     } else {
-       stat[i] = setStatus(defaultVal[i]);
+      stat[i] = setStatus(defaultVal[i]);
     }
-  }      
+  }
 
-  thing_config[0] = "{\"id\":\"" + id[0] + "\",\"page\":\"" + page[0]+"\",\"descr\":\"" + descr[0] + "\",\"widget\":\"" + widget[0] + "\",\"topic\":\"" + sTopic[0] + "\"," + color[0] + "}";   // GPIO switched On/Off by mobile widget toggle
-  thing_config[1] = "{\"id\":\"" + id[1] + "\",\"page\":\"" + page[1]+"\",\"descr\":\"" + descr[1] + "\",\"widget\":\"" + widget[1] + "\",\"topic\":\"" + sTopic[1] + "\"," + color[1] + "}";   // GPIO switched On/Off by mobile widget toggle
-  thing_config[2] = "{\"id\":\"" + id[2] + "\",\"page\":\"" + page[2]+"\",\"descr\":\"" + descr[2] + "\",\"widget\":\"" + widget[2] + "\",\"topic\":\"" + sTopic[2] + "\"," + style[2] + "," + badge[2] + ",\"leftIcon\":\"ion-ios-rainy-outline\",\"rightIcon\":\"ion-ios-rainy\"}"; // for icons see http://ionicons.com
-  thing_config[3] = "{\"id\":\"" + id[3] + "\",\"page\":\"" + page[3]+"\",\"descr\":\"" + descr[3] + "\",\"widget\":\"" + widget[3] + "\",\"topic\":\"" + sTopic[3] + "\"," + badge[3] + "}";   // ADC
-  thing_config[4] = "{\"id\":\"" + id[4] + "\",\"page\":\"" + page[4]+"\",\"descr\":\"" + descr[4] + "\",\"widget\":\"" + widget[4] + "\",\"topic\":\"" + sTopic[4] + "\"," + color[4] + "}";   // GPIO switched On/Off by mobile widget toggle
-  thing_config[5] = "{\"id\":\"" + id[5] + "\",\"page\":\"" + page[5]+"\",\"descr\":\"" + descr[5] + "\",\"widget\":\"" + widget[5] + "\",\"topic\":\"" + sTopic[5] + "\"," + style[5] + ","+ badge[5] + "}";    // GPIO15 R
-  thing_config[6] = "{\"id\":\"" + id[6] + "\",\"page\":\"" + page[6]+"\",\"descr\":\"" + descr[6] + "\",\"widget\":\"" + widget[6] + "\",\"topic\":\"" + sTopic[6] + "\"," + style[6] + ","+ badge[6] + "}";    // GPIO12 G
-  thing_config[7] = "{\"id\":\"" + id[7] + "\",\"page\":\"" + page[7]+"\",\"descr\":\"" + descr[7] + "\",\"widget\":\"" + widget[7] + "\",\"topic\":\"" + sTopic[7] + "\"," + style[7] + ","+ badge[7] + "}";    // GPIO13 B
+  thing_config[0] = "{\"id\":\"" + id[0] + "\",\"page\":\"" + page[0] + "\",\"descr\":\"" + descr[0] + "\",\"widget\":\"" + widget[0] + "\",\"topic\":\"" + sTopic[0] + "\"," + color[0] + "}"; // GPIO switched On/Off by mobile widget toggle
+  thing_config[1] = "{\"id\":\"" + id[1] + "\",\"page\":\"" + page[1] + "\",\"descr\":\"" + descr[1] + "\",\"widget\":\"" + widget[1] + "\",\"topic\":\"" + sTopic[1] + "\"," + color[1] + "}"; // GPIO switched On/Off by mobile widget toggle
+  thing_config[2] = "{\"id\":\"" + id[2] + "\",\"page\":\"" + page[2] + "\",\"descr\":\"" + descr[2] + "\",\"widget\":\"" + widget[2] + "\",\"topic\":\"" + sTopic[2] + "\"," + style[2] + "," + badge[2] + ",\"leftIcon\":\"ion-ios-rainy-outline\",\"rightIcon\":\"ion-ios-rainy\"}"; // for icons see http://ionicons.com
+  thing_config[3] = "{\"id\":\"" + id[3] + "\",\"page\":\"" + page[3] + "\",\"descr\":\"" + descr[3] + "\",\"widget\":\"" + widget[3] + "\",\"topic\":\"" + sTopic[3] + "\"," + badge[3] + "}"; // ADC
+  thing_config[4] = "{\"id\":\"" + id[4] + "\",\"page\":\"" + page[4] + "\",\"descr\":\"" + descr[4] + "\",\"widget\":\"" + widget[4] + "\",\"topic\":\"" + sTopic[4] + "\"," + color[4] + "}"; // GPIO switched On/Off by mobile widget toggle
+  thing_config[5] = "{\"id\":\"" + id[5] + "\",\"page\":\"" + page[5] + "\",\"descr\":\"" + descr[5] + "\",\"widget\":\"" + widget[5] + "\",\"topic\":\"" + sTopic[5] + "\"," + style[5] + "," + badge[5] + "}"; // GPIO15 R
+  thing_config[6] = "{\"id\":\"" + id[6] + "\",\"page\":\"" + page[6] + "\",\"descr\":\"" + descr[6] + "\",\"widget\":\"" + widget[6] + "\",\"topic\":\"" + sTopic[6] + "\"," + style[6] + "," + badge[6] + "}"; // GPIO12 G
+  thing_config[7] = "{\"id\":\"" + id[7] + "\",\"page\":\"" + page[7] + "\",\"descr\":\"" + descr[7] + "\",\"widget\":\"" + widget[7] + "\",\"topic\":\"" + sTopic[7] + "\"," + style[7] + "," + badge[7] + "}"; // GPIO13 B
 
 }
 // send confirmation
-void pubStatus(String t, String payload) {  
-    if (client.publish(t + "/status", payload)) { 
-       Serial.println("Publish new status for " + t + ", value: " + payload);
-    } else {
-       Serial.println("Publish new status for " + t + " FAIL!");
-    }
+void pubStatus(String t, String payload) {
+  if (client.publish(t + "/status", payload)) {
+    Serial.println("Publish new status for " + t + ", value: " + payload);
+  } else {
+    Serial.println("Publish new status for " + t + " FAIL!");
+  }
 }
 void pubConfig() {
   bool success;
-  success = client.publish(MQTT::Publish(prefix, deviceID).set_qos(1));
-  if (success) {
-      delay(500);
-      for (int i = 0; i < nWidgets; i = i + 1) {
-        success = client.publish(MQTT::Publish(prefix + "/" + deviceID + "/config", thing_config[i]).set_qos(1));
-        if (success) {
-          Serial.println("Publish config: Success (" + thing_config[i] + ")");
-        } else {
-          Serial.println("Publish config FAIL! ("    + thing_config[i] + ")");
-        }
-        delay(50);
-      }      
+  for (int i = 0; i < nWidgets; i = i + 1) {
+    success = client.publish(MQTT::Publish(prefix + "/" + deviceID + "/config", thing_config[i]).set_qos(1));
+    if (success) {
+      Serial.println("Publish config: Success (" + thing_config[i] + ")");
+    } else {
+      Serial.println("Publish config FAIL! ("    + thing_config[i] + ")");
+    }
+    delay(50);
   }
   if (success) {
-     Serial.println("Publish config: Success");
+    Serial.println("Publish config: Success");
   } else {
-     Serial.println("Publish config: FAIL");
+    Serial.println("Publish config: FAIL");
   }
   for (int i = 0; i < nWidgets; i = i + 1) {
-      pubStatus(sTopic[i], stat[i]);
-      delay(50);
-  }      
+    pubStatus(sTopic[i], stat[i]);
+    delay(50);
+  }
 }
 
 
@@ -235,81 +227,81 @@ void callback(const MQTT::Publish& sub) {
 
   if (sub.topic() == sTopic[0] + "/control") {
     if (sub.payload_string() == "0") {
-       newValue = 1; // inverted
-       stat[0] = stat0;
+      newValue = 1; // inverted
+      stat[0] = stat0;
     } else {
-       newValue = 0;
-       stat[0] = stat1;
+      newValue = 0;
+      stat[0] = stat1;
     }
-    digitalWrite(pin[0],newValue);
+    digitalWrite(pin[0], newValue);
     pubStatus(sTopic[0], stat[0]);
- } else if (sub.topic() == sTopic[1] + "/control") {
+  } else if (sub.topic() == sTopic[1] + "/control") {
     if (sub.payload_string() == "0") {
-       newValue = 1; // inverted
-       stat[1] = stat0;
+      newValue = 1; // inverted
+      stat[1] = stat0;
     } else {
-       newValue = 0; // inverted
-       stat[1] = stat1;
+      newValue = 0; // inverted
+      stat[1] = stat1;
     }
-    digitalWrite(pin[1],newValue);
+    digitalWrite(pin[1], newValue);
     pubStatus(sTopic[1], stat[1]);
- } else if (sub.topic() == sTopic[2] + "/control") {
+  } else if (sub.topic() == sTopic[2] + "/control") {
     String x = sub.payload_string();
-    analogWrite(pin[2],1023-x.toInt());
+    analogWrite(pin[2], 1023 - x.toInt());
     stat[2] = setStatus(x);
     pubStatus(sTopic[2], stat[2]);
- } else if (sub.topic() == sTopic[3] + "/control") {
-   // ADC : nothing, display only
- } else if (sub.topic() == sTopic[4] + "/control") {
+  } else if (sub.topic() == sTopic[3] + "/control") {
+    // ADC : nothing, display only
+  } else if (sub.topic() == sTopic[4] + "/control") {
     if (sub.payload_string() == "0") {
-       newValue = 1; // inverted
-       stat[4] = stat0;
+      newValue = 1; // inverted
+      stat[4] = stat0;
     } else {
-       newValue = 0; // inverted
-       stat[4] = stat1;
+      newValue = 0; // inverted
+      stat[4] = stat1;
     }
-    digitalWrite(pin[4],newValue);
+    digitalWrite(pin[4], newValue);
     pubStatus(sTopic[4], stat[4]);
- } else if (sub.topic() == sTopic[5] + "/control") {
+  } else if (sub.topic() == sTopic[5] + "/control") {
     String x = sub.payload_string();
-    analogWrite(pin[5],x.toInt());
+    analogWrite(pin[5], x.toInt());
     stat[5] = setStatus(x);
     pubStatus(sTopic[5], stat[5]);
- } else if (sub.topic() == sTopic[6] + "/control") {
+  } else if (sub.topic() == sTopic[6] + "/control") {
     String x = sub.payload_string();
-    analogWrite(pin[6],x.toInt());
+    analogWrite(pin[6], x.toInt());
     stat[6] = setStatus(x);
     pubStatus(sTopic[6], stat[6]);
- } else if (sub.topic() == sTopic[7] + "/control") {
+  } else if (sub.topic() == sTopic[7] + "/control") {
     String x = sub.payload_string();
-    analogWrite(pin[7],x.toInt());
+    analogWrite(pin[7], x.toInt());
     stat[7] = setStatus(x);
     pubStatus(sTopic[7], stat[7]);
- } else if (sub.topic() == prefix) {
+  } else if (sub.topic() == prefix) {
     if (sub.payload_string() == "HELLO") {
       pubConfig();
     }
- }
+  }
 }
 
 void setup() {
   initVar();
   WiFi.mode(WIFI_STA);
   pinMode(pin[0], OUTPUT);
-  digitalWrite(pin[0],defaultVal[0]);
+  digitalWrite(pin[0], defaultVal[0]);
   pinMode(pin[1], OUTPUT);
-  digitalWrite(pin[1],defaultVal[1]);
+  digitalWrite(pin[1], defaultVal[1]);
   pinMode(pin[2], OUTPUT);
-  analogWrite(pin[2],defaultVal[2]);  // PWM
+  analogWrite(pin[2], defaultVal[2]); // PWM
   stat[3] = setStatus(analogRead(pin[3]));
   pinMode(pin[4], OUTPUT);
-  digitalWrite(pin[4],defaultVal[4]);
+  digitalWrite(pin[4], defaultVal[4]);
   pinMode(pin[5], OUTPUT);
-  analogWrite(pin[5],defaultVal[5]);  // PWM
+  analogWrite(pin[5], defaultVal[5]); // PWM
   pinMode(pin[6], OUTPUT);
-  analogWrite(pin[6],defaultVal[6]);  // PWM
+  analogWrite(pin[6], defaultVal[6]); // PWM
   pinMode(pin[7], OUTPUT);
-  analogWrite(pin[7],defaultVal[7]);  // PWM
+  analogWrite(pin[7], defaultVal[7]); // PWM
   // Setup console
   Serial.begin(115200);
   delay(10);
@@ -351,11 +343,11 @@ void loop() {
         client.set_callback(callback);
         Serial.println("Connect to MQTT server: Success");
         pubConfig();
-	      client.subscribe(prefix);                  // for receiving HELLO messages
+        client.subscribe(prefix);                  // for receiving HELLO messages
         client.subscribe(prefix + "/+/+/control"); // for receiving GPIO control messages
         Serial.println("Subscribe: Success");
       } else {
-        Serial.println("Connect to MQTT server: FAIL");   
+        Serial.println("Connect to MQTT server: FAIL");
         delay(1000);
       }
     }
@@ -363,12 +355,17 @@ void loop() {
     if (client.connected()) {
       newtime = millis();
       if (newtime - oldtime > 10000) { // 10 sec
+        Serial.print("Time: ");
+        Serial.println(val);
         int x = analogRead(pin[3]);
-        val = "{\"status\":\"" + String(x)+ "\"}";
+        val = "{\"status\":" + String(x) + "}";
         client.publish(sTopic[3] + "/status", val );  // widget 3
+        Serial.print("Publish ADC: ");
+        Serial.println(val);
         oldtime = newtime;
       }
       client.loop();
     }
   }
+  yield();
 }
