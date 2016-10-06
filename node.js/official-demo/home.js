@@ -6,7 +6,7 @@
 //
 // IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
 //
-// version     : 1.0
+// version     : 1.1
 // IoT Manager : 1.5.0 and above
 //
 ////////////////////////////////////////////////
@@ -69,7 +69,7 @@ config[1] = {
   style2 : "font-size:20px;float:left",
   descr  : "Outdoor temp",
   topic  : prefix + "/" + deviceID + "/" + widget + id,
-  class3 : "balanced",
+  class3 : "assertive",
   style3 : "font-size:40px;font-weight:bold;float:right",
 };
 
@@ -129,6 +129,9 @@ client.on('connect', function () {
   client.subscribe(prefix, { qos : 1 }); // HELLO expected
   // client.subscribe(prefix + "/" + deviceID +"/+/control", { qos : 1 }); // all commands, not used int this example
   pubConfig();
+  setTimeout(function() {
+     pubStatus();
+  }, 1000);
 });
 
 client.on('error', function () {
@@ -161,24 +164,17 @@ function pubStatus() {
   var outdoor = 10 + Math.round(Math.random() * 5);
   var indoor = 18 + Math.round(Math.random() * 5);
   var hum = 60 - Math.round(Math.random() * 30);
-  var co2 = Math.random();
-  var status = {};
-  if (co2 > 0.5) {
-     status =  {status:'normal', class3: 'balanced'}
-  } else {
-     status =  {status:'high', class3: 'assertive'}
+  var health = 'normal';   
+  if (hum < 40 || indoor < 20) {
+     health = 'not good';
   }
-
   client.publish( config[1].topic+"/status", JSON.stringify({ status: outdoor + "°C" }) );
   client.publish( config[2].topic+"/status", JSON.stringify({ status: indoor + "°C" }) );
   client.publish( config[3].topic+"/status", JSON.stringify({ status: hum + "%" }) );
-  client.publish( config[4].topic+"/status", JSON.stringify(status) );
+  client.publish( config[4].topic+"/status", JSON.stringify({ status: health }) );
   console.log('Publish outdoor:' + outdoor + ' indoor:' + indoor + ' hum:' + hum);
 }
 ////////////////////////////////////////////////
 // run main
 console.log('Start');
 
-setInterval(function() {
-     pubStatus();
-}, 5000);

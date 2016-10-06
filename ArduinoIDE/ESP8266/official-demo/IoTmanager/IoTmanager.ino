@@ -1,15 +1,20 @@
 /*
- IoT Manager mqtt device client https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+ IoT Manager mqtt device client 
+ 
+ https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+ 
  Based on Basic MQTT example with Authentication
+ 
  PubSubClient library v 1.91.1 https://github.com/Imroy/pubsubclient
   - connects to an MQTT server, providing userdescr and password
   - publishes config to the topic "/IoTmanager/config/deviceID/"
   - subscribes to the topic "/IoTmanager/hello" ("hello" messages from mobile device) 
 
-  Tested with Arduino IDE 1.6.7 + ESP8266 Community Edition v 2.1.0-rc1 and PubSubClient library v 1.91.1 https://github.com/Imroy/pubsubclient
-  ESP8266 Community Edition v 2.1.0-rc1 have some HTTPS issues. Push notification temporary disabled.
-
-  sketch version : 1.5
+  Tested with Arduino IDE 1.6.12 + ESP8266 Community Edition v 2.3.0
+  
+  PubSubClient library v 1.91.1 https://github.com/Imroy/pubsubclient
+  
+  sketch version : 1.6
   IoT Manager    : any version
 
   toggle, range, small-badge widgets demo
@@ -28,19 +33,19 @@ String deviceID = "dev01-kitchen";   // thing ID - unique device id in our proje
 WiFiClient wclient;
 
 // config for cloud mqtt broker by DNS hostname ( for example, cloudmqtt.com use: m20.cloudmqtt.com - EU, m11.cloudmqtt.com - USA )
-String mqttServerName = "m11.cloudmqtt.com";            // for cloud broker - by hostname, from CloudMQTT account data
-int    mqttport = 10927;                                // default 1883, but CloudMQTT.com use other, for example: 13191, 23191 (SSL), 33191 (WebSockets) - use from CloudMQTT account data
-String mqttuser =  "test";                              // from CloudMQTT account data
-String mqttpass =  "test";                              // from CloudMQTT account data
-PubSubClient client(wclient, mqttServerName, mqttport); // for cloud broker - by hostname
+//String mqttServerName = "m11.cloudmqtt.com";            // for cloud broker - by hostname, from CloudMQTT account data
+//int    mqttport = 10927;                                // default 1883, but CloudMQTT.com use other, for example: 13191, 23191 (SSL), 33191 (WebSockets) - use from CloudMQTT account data
+//String mqttuser =  "test";                              // from CloudMQTT account data
+//String mqttpass =  "test";                              // from CloudMQTT account data
+//PubSubClient client(wclient, mqttServerName, mqttport); // for cloud broker - by hostname
 
 
 // config for local mqtt broker by IP address
-//IPAddress server(192, 168, 1, 100);                        // for local broker - by address
-//int    mqttport = 1883;                                    // default 1883
-//String mqttuser =  "";                                     // from broker config
-//String mqttpass =  "";                                     // from broker config
-//PubSubClient client(wclient, server, mqttport);            // for local broker - by address
+IPAddress server(192, 168, 1, 135);                        // for local broker - by address
+int    mqttport = 1883;                                    // default 1883
+String mqttuser =  "";                                     // from broker config
+String mqttpass =  "";                                     // from broker config
+PubSubClient client(wclient, server, mqttport);            // for local broker - by address
 
 String val;
 String ids = "";
@@ -59,43 +64,13 @@ String badge       [nWidgets];
 String widget      [nWidgets];
 String descr       [nWidgets];
 String page        [nWidgets];
+String pageId      [nWidgets];
 String thing_config[nWidgets];
 String id          [nWidgets];
 int    pin         [nWidgets];
 int    defaultVal  [nWidgets];
 bool   inverted    [nWidgets];
 
-// Push notifications
-const char* host = "onesignal.com";
-WiFiClientSecure httpClient;
-const int httpsPort = 443;
-String url = "/api/v1/notifications";
-
-void push(String msg) {
-  Serial.println("PUSH: try to send push notification...");
-  if (ids.length() == 0) {
-     Serial.println("PUSH: ids not received, push failed");
-     return;
-  }
-  if (!httpClient.connect(host, httpsPort)) {
-     Serial.println("PUSH: connection failed");
-     return;
-  }
-  String data = "{\"app_id\": \"8871958c-5f52-11e5-8f7a-c36f5770ade9\",\"include_player_ids\":[\"" + ids + "\"],\"android_group\":\"IoT Manager\",\"contents\": {\"en\": \"" + msg + "\"}}";
-  httpClient.println("POST " + url + " HTTP/1.1");
-  httpClient.print("Host:");
-  httpClient.println(host);
-  httpClient.println("User-Agent: esp8266.Arduino.IoTmanager");
-  httpClient.print("Content-Length: ");
-  httpClient.println(data.length());
-  httpClient.println("Content-Type: application/json");
-  httpClient.println("Connection: close");
-  httpClient.println();
-  httpClient.println(data);
-  httpClient.println();
-  Serial.println(data);
-  Serial.println("PUSH: done.");
-}
 String setStatus ( String s ) {
   String stat = "{\"status\":\"" + s + "\"}";
   return stat;
@@ -107,6 +82,7 @@ String setStatus ( int s ) {
 void initVar() {
   id    [0] = "0";
   page  [0] = "Kitchen";
+  pageId[0] = 1;
   descr [0] = "Light-0";
   widget[0] = "toggle";
   pin[0] = 4;                                              // GPIO4 - toggle
@@ -117,6 +93,7 @@ void initVar() {
 
   id    [1] = "1";
   page  [1] = "Kitchen";
+  pageId[1] = 1;
   descr [1] = "Light-1";
   widget[1] = "toggle";
   pin[1] = 5;                                              // GPIO5 - toggle
@@ -127,6 +104,7 @@ void initVar() {
 
   id    [2] = "2";
   page  [2] = "Kitchen";
+  pageId[2] = 1;
   descr [2] = "Dimmer";
   widget[2] = "range";
   pin[2] = 0;                                              // GPIO0 - range
@@ -138,6 +116,7 @@ void initVar() {
 
   id    [3] = "3";
   page  [3] = "Kitchen";
+  pageId[3] = 1;
   descr  [3] = "ADC";
   widget[3] = "small-badge";
   pin   [3] = A0;                                          // ADC
@@ -146,6 +125,7 @@ void initVar() {
 
   id    [4] = "4";
   page  [4] = "Outdoor";
+  pageId[4] = 2;
   descr [4] = "Garden light";
   widget[4] = "toggle";
   pin   [4] = 2;                                           // GPIO2
@@ -157,6 +137,7 @@ void initVar() {
   // RED
   id    [5] = "5";
   page  [5] = "Kitchen";
+  pageId[5] = 1;
   descr [5] = "RED";
   widget[5] = "range";
   pin   [5] = 15;                                          // GPIO15 - range
@@ -168,6 +149,7 @@ void initVar() {
   // GREEN
   id    [6] = "6";
   page  [6] = "Kitchen";
+  pageId[6] = 1;
   descr [6] = "GREEN";
   widget[6] = "range";
   pin[6] = 12;                                      // GPIO12 - range
@@ -179,6 +161,7 @@ void initVar() {
   // BLUE
   id    [7] = "7";
   page  [7] = "Kitchen";
+  pageId[7] = 1;
   descr [7] = "BLUE";
   widget[7] = "range";
   pin[7] = 13;                                      // GPIO13 - range
@@ -229,7 +212,7 @@ void pubConfig() {
         } else {
           Serial.println("Publish config FAIL! ("    + thing_config[i] + ")");
         }
-        delay(150);
+        delay(50);
       }      
   }
   if (success) {
@@ -239,7 +222,7 @@ void pubConfig() {
   }
   for (int i = 0; i < nWidgets; i = i + 1) {
       pubStatus(sTopic[i], stat[i]);
-      delay(150);
+      delay(50);
   }      
 }
 
@@ -302,8 +285,6 @@ void callback(const MQTT::Publish& sub) {
     analogWrite(pin[7],x.toInt());
     stat[7] = setStatus(x);
     pubStatus(sTopic[7], stat[7]);
- } else if (sub.topic() == prefix + "/ids") {
-    ids = sub.payload_string();
  } else if (sub.topic() == prefix) {
     if (sub.payload_string() == "HELLO") {
       pubConfig();
@@ -370,17 +351,8 @@ void loop() {
         client.set_callback(callback);
         Serial.println("Connect to MQTT server: Success");
         pubConfig();
-	      client.subscribe(prefix);                 // for receiving HELLO messages
-        client.subscribe(prefix + "/ids");        // for receiving IDS  messages
-        client.subscribe(sTopic[0] + "/control"); // for receiving GPIO messages
-        client.subscribe(sTopic[1] + "/control"); // for receiving GPIO messages
-        client.subscribe(sTopic[2] + "/control"); // for receiving GPIO messages
-        // 3 - display only, no control
-        client.subscribe(sTopic[4] + "/control"); // for receiving GPIO messages
-        client.subscribe(sTopic[5] + "/control"); // for receiving GPIO messages
-        client.subscribe(sTopic[6] + "/control"); // for receiving GPIO messages
-        client.subscribe(sTopic[7] + "/control"); // for receiving GPIO messages
-
+	      client.subscribe(prefix);                  // for receiving HELLO messages
+        client.subscribe(prefix + "/+/+/control"); // for receiving GPIO control messages
         Serial.println("Subscribe: Success");
       } else {
         Serial.println("Connect to MQTT server: FAIL");   
@@ -395,16 +367,6 @@ void loop() {
         val = "{\"status\":\"" + String(x)+ "\"}";
         client.publish(sTopic[3] + "/status", val );  // widget 3
         oldtime = newtime;
-        if ((millis()-pushtime > 10000) && (x > 100)) {
-           String msg = "Kitchen ADC more then 100! (" + String(x) + ")";
-           //
-           // ESP8266 Community Edition v 2.0.0-stable have some HTTPS issues. Push notification temporary disabled. Please, uncomment next line if you use future versions.
-           //
-           // push(msg);
-           //
-           //
-           pushtime = millis();
-        }
       }
       client.loop();
     }
