@@ -1,0 +1,12 @@
+{
+  "id"     : "0",
+  "status" : "My Home",
+  "widget" : "anydata",
+  "page"   : "Kitchen",
+  "pageId" : 10,
+  "topic"  : "/IoTmanager/dev22/widget0",
+  "class1" : "item no-border",
+  "style2" : "font-size:40px;line-height:3em;",
+  "class3" : "calm text-center",
+  "style3" : "font-size:40px;font-weight:bold;"
+}

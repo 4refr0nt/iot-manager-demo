@@ -23,3 +23,7 @@ simple-btn widget demo
 ### anydata
 
 anydata widget demo with DS18B20
+
+### AnydataToggle
+
+anydata+toggle widgets demo with JSON > .h converter

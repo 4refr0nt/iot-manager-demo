@@ -1,0 +1,13 @@
+{
+  "id"          : "2",
+  "descr"       : "Kitchen lamp",
+  "page"        : "Kitchen",
+  "pageId"      : 10,
+  "widget"      : "toggle",
+  "topic"       : "/IoTmanager/dev22/widget2",
+  "iconClass"   : "ion-ios-flame",
+  "iconClassOff": "ion-ios-flame-outline",
+  "iconStyle"   : "font-size:30px;color:#ff3d3d;",
+  "iconStyleOff": "font-size:30px;color:#eee;",
+  "descrStyle"  : "font-size:20px;line-height:1.5em;"
+}

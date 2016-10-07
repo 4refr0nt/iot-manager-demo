@@ -1,0 +1,12 @@
+{
+  "id"     : "1",
+  "descr"  : "ADC value",
+  "widget" : "anydata",
+  "page"   : "Kitchen",
+  "pageId" : 10,
+  "topic"  : "/IoTmanager/dev22/widget1",
+  "class1" : "item no-border",
+  "style2" : "font-size:28px;float:left;line-height:3em",
+  "class3" : "balanced-bg light padding-left padding-right rounded",
+  "style3" : "font-size:40px;font-weight:bold;float:right;line-height:1.5em;"
+}
