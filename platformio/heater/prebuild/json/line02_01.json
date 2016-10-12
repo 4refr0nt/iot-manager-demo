@@ -1,0 +1,11 @@
+{
+  "id"     : "1",
+  "page"   : "Heater",
+  "pageId" : 10,
+  "widget" : "simple-btn",
+  "topic"  : "/IoTmanager/heater/widget01",
+  "class1" : "col-xs-4",
+  "class2" : "calm",
+  "class3" : "button button-calm icon ion-minus",
+  "style3" : "height:70px;"
+}

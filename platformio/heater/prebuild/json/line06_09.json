@@ -1,0 +1,10 @@
+{
+  "id"     : "9",
+  "widget" : "anydata",
+  "page"   : "Heater",
+  "pageId" : 10,
+  "topic"  : "/IoTmanager/heater/widget09",
+  "class1" : "item no-border rounded text-center padding-top padding-bottom",
+  "class3" : "assertive-bg light",
+  "style3" : "font-size:20px"
+}

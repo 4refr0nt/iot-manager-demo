@@ -1,0 +1,11 @@
+{
+  "id"     : "4",
+  "page"   : "Heater",
+  "pageId" : 10,
+  "widget" : "anydata",
+  "topic"  : "/IoTmanager/heater/widget04",
+  "class1" : "item no-border",
+  "class3" : "calm-bg light text-center padding-left padding-right rounded",
+  "style3" : "font-size:40px;font-weight:bold;line-height:2em;height:70px;",
+  "status" : 0
+}
