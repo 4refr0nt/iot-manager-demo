@@ -14,11 +14,15 @@ node boiler.js
 
 - boiler.js
 - bilb.js
+- chart.js
 - demo.js
 - display-value.js 
 - fillgauge.js
 - home.js
 - linear.js
+- simple-btn.js
+- speech.js
+- toggle.js
 
 
 ## License
