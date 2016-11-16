@@ -10,7 +10,7 @@ for %%f in (json/*.*) do (
   bin\sed "s/unsigned char temp_%%~nf\_j\[\]\ =/const char %%~nf_json[] =/" temp\%%~nf.x | sed "s/unsigned int temp_%%~nf\_j\_len/const int %%~nf\_len/" > ..\lib\widgets\%%~nf.h
   echo Resulting : %%~nf.h
 )
-del /Q /S temp\*.j >nul
-del /Q /S temp\*.x >nul
+rem del /Q /S temp\*.j >nul
+rem del /Q /S temp\*.x >nul
 rd temp >nul
 cd ..
