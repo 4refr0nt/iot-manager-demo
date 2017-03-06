@@ -23,6 +23,7 @@ node boiler.js
 - simple-btn.js
 - speech.js
 - toggle.js
+- gauge.js
 
 
 ## License

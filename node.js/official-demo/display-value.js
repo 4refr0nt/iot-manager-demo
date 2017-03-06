@@ -4,9 +4,11 @@
 //
 // 4 different colors demo display-value widgets with random data (colors: red, green, blue, yellow)
 //
-// IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+// IoT Manager 
+// for Android https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+// for iOS     https://itunes.apple.com/us/app/iot-manager/id1155934877
 //
-// version     : 1.6
+// version     : 1.8
 // IoT Manager : 1.4.6 and above
 //
 ////////////////////////////////////////////////
@@ -37,7 +39,7 @@ var config1 = {"id":"1",
   page   : "display 1",
 //  pageId : 1,
   widget : "display-value",
-  class1 : "item item-dark no-border",
+  class1 : "item no-border",
   style1 : "",
   descr  : "Display-1",
   class2 : "balanced",
@@ -55,7 +57,7 @@ var config2 = {"id":"2",
   page   : "display 2",
 //  pageId : 2,
   widget : "display-value",
-  class1 : "item item-dark no-border",
+  class1 : "item no-border",
   style1 : "",
   descr  : "Display-2",
   class2 : "assertive",
@@ -73,7 +75,7 @@ var config3 = {"id":"3",
   page   : "display 34",
 //  pageId : 3,
   widget : "display-value",
-  class1 : "item no-border item-dark text-center col-xs-6",
+  class1 : "item no-border text-center col-xs-6",
   style1 : "",
   descr  : "d-3",
   class2 : "calm",
@@ -91,7 +93,7 @@ var config4 = {"id":"4",
   page   : "display 34",
 //  pageId : 3,
   widget : "display-value",
-  class1 : "item no-border item-dark text-center col-xs-6",
+  class1 : "item no-border text-center col-xs-6",
   style1 : "",
   descr  : "d-4",
   class2 : "energized",
@@ -113,7 +115,7 @@ page   : "Temp",
 widget : "display-value",
 class1 : "item no-border",                          // class for 1st div
 style1 : "",                                        // style for 1st div
-descr  : "Комната",                            // text  for description
+descr  : "Kitchen",                                 // text  for description
 class2 : "balanced",                                // class for description from Widgets Guide - Color classes
 style2 : "font-size:20px;float:left;padding-top:10px;font-weight:bold;", // style for description
 topic  : prefix + "/" + deviceID + "/display5",
@@ -148,7 +150,9 @@ client.on('message', function (topic, message) {
 });
 
 console.log('Start');
+
 pubConfig();
+
 setInterval(function() {
   pubStatus1();
   pubStatus2();
@@ -162,7 +166,7 @@ function pubStatus1() {
       value1 = (20 - Math.round( Math.random() * 40 ));
       console.log("Send status 1:" + value1);
       value1 = value1 + '°C'
-      client.publish( config1.topic + "/status", JSON.stringify({ status: value1, toast: "Outdoor temp now: "+value1, vibrate: 50 }) );
+      client.publish( config1.topic + "/status", JSON.stringify({ status: value1, longToast: "Outdoor temp now: "+value1, vibrate: 0 }) );
 }
 ////////////////////////////////////////////////
 function pubStatus2() {
@@ -190,28 +194,16 @@ function pubStatus5() {
 ////////////////////////////////////////////////
 function pubConfig() {
     client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config1),{ qos : 1 });
+    client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config2),{ qos : 1 });
+    client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config3),{ qos : 1 });
+    client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config4),{ qos : 1 });
+    client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config5),{ qos : 1 });
     setTimeout(function() {
       pubStatus1();
-    }, 200);
-    setTimeout(function() {
-      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config2),{ qos : 1 });
-    }, 400);
-    setTimeout(function() {
       pubStatus2();
-    }, 600);
-    setTimeout(function() {
-      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config3),{ qos : 1 });
-    }, 800);
-    setTimeout(function() {
       pubStatus3();
-    }, 1000);
-    setTimeout(function() {
-      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config4),{ qos : 1 });
-    }, 1200);
-    setTimeout(function() {
       pubStatus4();
-    }, 1400);
-      client.publish(prefix + "/" + deviceID + "/config", JSON.stringify(config5),{ qos : 1 });
       pubStatus5();
+    }, 1000);
 }
 ////////////////////////////////////////////////

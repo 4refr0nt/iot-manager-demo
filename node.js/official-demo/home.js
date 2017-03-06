@@ -129,7 +129,7 @@ client.on('connect', function () {
   client.subscribe(prefix, { qos : 1 }); // HELLO expected
   // client.subscribe(prefix + "/" + deviceID +"/+/control", { qos : 1 }); // all commands, not used int this example
   pubConfig();
-  setTimeout(function() {
+  setInterval(function() {
      pubStatus();
   }, 1000);
 });

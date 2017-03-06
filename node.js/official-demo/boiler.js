@@ -2,11 +2,11 @@
 //
 // Demo device emulator "Boiler: thermostat with adjustable hysteresis"
 //
+// IoT Manager 
+// for Android https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
+// for iOS     https://itunes.apple.com/us/app/iot-manager/id1155934877
 //
-//
-// IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
-//
-// version     : 1.0
+// version     : 1.1
 // IoT Manager : 1.4.8 and above
 //
 ////////////////////////////////////////////////
@@ -70,7 +70,7 @@ config[1] = {
   page   : "boiler",
   pageId : 1,
   widget : widget,
-  class1 : "col-xs-4",
+  class1 : "text-left no-padding-right col-xs-4",
   class2 : "calm",
   topic  : prefix + "/" + deviceID + "/" + widget + id,
   class3 : "button button-calm icon ion-minus",
@@ -85,7 +85,7 @@ config[2] = {
   page   : "boiler",
   pageId : 1,
   widget : widget,
-  class1 : "no-padding-left col-xs-4",
+  class1 : "text-center no-padding-left no-padding-right col-xs-4",
   topic  : prefix + "/" + deviceID + "/" + widget + id,
   height : "70",
   color  : "#58b7ff",
@@ -101,8 +101,7 @@ config[3] = {
   page   : "boiler",
   pageId : 1,
   widget : widget,
-  class1 : "col-xs-4",
-  style1 : "",
+  class1 : "text-right no-padding-left col-xs-4",
   class2 : "calm",
   topic  : prefix + "/" + deviceID + "/" + widget + id,
   class3 : "button button-calm icon ion-plus",
@@ -134,11 +133,11 @@ config[5] = {
   pageId : 1,
   widget : widget,
   class1 : "item no-border",
-  style2 : "font-size:16px;float:left",
+  style2 : "font-size:16px;float:left;line-height:1.5em;",
   descr  : "Heater status",
   topic  : prefix + "/" + deviceID + "/" + widget + id,
   class3 : "light padding-left padding-right rounded",
-  style3 : "font-size:20px;font-weight:bold;float:right",
+  style3 : "font-size:20px;font-weight:bold;float:right;line-height:1.5em;",
 };
 
 // Stop
@@ -153,7 +152,7 @@ config[6] = {
   class1 : "item no-border padding-bottom",
   descr  : "Emergency Stop heating",
   class2 : "assertive padding-top",
-  style2 : "float:left;",
+  style2 : "font-size:16px;float:left;",
   class3 : "button icon ion-checkmark-circled",
   style3 : "float:right;",
   widgetConfig : {
@@ -164,17 +163,6 @@ config[6] = {
     alertText     : "A you sure?", // confirmation will be show after button pressed
     alertTitle    : "Stop heating", 
   }
-/*
-  widgetConfig : {
-    fill          : "#FF5050",     // You can use any HTML colors
-    fillPressed   : "#00FF00",
-    labelPressed  : "#0000FF",
-    label         : "#FFFFFF",
-    title         : "1",
-    alertText     : "A you sure?", // confirmation will be show after button pressed
-    alertTitle    : "Stop heating", 
-  }
-*/
 };
 
 
@@ -304,7 +292,7 @@ function pubHeaterStatus( force ) {
             newStyle = { status : "ON",  class3 : "assertive-bg light padding-left padding-right rounded" }
             newStyle1 = {
                 descr  : "Emergency Stop heating",
-                class2 : "assertive",
+                class2 : "assertive padding-top",
                 class3 : "button icon ion-checkmark-circled",
                 widgetConfig : {
                 fill        : "#FF5050",
@@ -316,7 +304,7 @@ function pubHeaterStatus( force ) {
             newStyle = { status : "OFF", class3 : "calm-bg light padding-left padding-right rounded" }
             newStyle1 = {
                 descr  : "Heating already stopped",
-                class2 : "calm",
+                class2 : "calm padding-top",
                 class3 : "button icon ion-close-circled",
 //                style3 : "display:none;",
                 widgetConfig : {

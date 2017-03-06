@@ -40,8 +40,8 @@ client.on('offline', function () {
 
 client.on('message', function (topic, message) {
   if (message.toString().length > 0) {
-    console.log('receive ' + message.toString())
-    client.publish(topic, null, {retain: true});
+    console.log("receive '" + topic + "' : '" + message.toString() + "'")
+//    client.publish(topic, null, {retain: true});
     console.log('clear topic ' + topic)
   }
 });

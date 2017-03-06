@@ -45,7 +45,7 @@ config[0] = {
   id     : id,
   widget : widget,
   topic  : prefix + "/" + deviceID + "/" + widget + id,
-  class1 : "item" // for padding
+  class1 : "padding"
 };
 
 client.on('connect', function () {

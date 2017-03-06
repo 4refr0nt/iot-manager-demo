@@ -5,7 +5,7 @@
 //
 // IoT Manager https://play.google.com/store/apps/details?id=ru.esp8266.iotmanager
 //
-// version     : 1.0
+// version     : 1.1
 // IoT Manager : 1.4.11 and above
 //
 ////////////////////////////////////////////////
@@ -36,7 +36,7 @@ var config1 = {
   descr  :"bulb 1",
   widget :"steel",
   topic  :prefix + "/" + deviceID + "/bulb1",
-  class1 : "col-xs-4 text-center",
+  class1 : "col-xs-6 text-center",
   widgetConfig : {
      width  : "auto2",
      height : 200,
@@ -50,7 +50,7 @@ var config2 = {
   descr  :"bulb 2",
   widget :"steel",
   topic  :prefix + "/" + deviceID + "/bulb2",
-  class1 : "col-xs-4 text-center",
+  class1 : "col-xs-6 text-center",
   widgetConfig : {
      width  : "auto2",
      height : 200,
