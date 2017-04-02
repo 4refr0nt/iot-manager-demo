@@ -1,0 +1,25 @@
+Json to C++ header (c) 2017 www.onlims.com\n"
+Sergey Alikin, Ricardo Timmermann\n"
+
+Repository: https://gitlab.com/OnLIMS-public/json2h
+
+Small command line program for converting json (and any text) file to C header file.
+
+Use:
+json2h jsonfile.json OPTIONS
+    -r or --reduce
+        removes from source input all chars with code <= 0x20 to reduce header file size
+    -c or --colsize VALUE
+        set item count on each line of result array, default is 12.
+    -d or --deletecomments
+        deletes source file as comment in result header file
+
+Examples of usage:
+    ./json2h test.json (produce non-reduced output with 12 items on each row)
+    ./json2h -c 15 -r test.json (produce reduced output with 15 items on each row)
+    ./json2h test.json -r -c 0 (produce reduced output with one long line)
+    ./json2h test.json -r -d (produce reduced output, source file did not included into result file)
+
+Result of program work will JSON_FILE_NAME.h file in the same directory (if file exists it will be overwritten).
+
+Binaries for different (Linux and Windows) placed into bin/ folder, binaries contains all necessary libraries for start.
